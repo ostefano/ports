@@ -1,0 +1,38 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem          1.0
+PortGroup           python 1.0
+
+name                py-stevedore
+version             5.1.0
+revision            0
+
+categories-append   devel
+maintainers         nomaintainer
+supported_archs     noarch
+platforms           {darwin any}
+license             Apache-2
+
+description         Manage dynamic plugins for Python applications
+long_description    {*}${description}
+
+homepage            https://docs.openstack.org/stevedore
+
+checksums           rmd160  aba6ae6f3ac5514f602bfb401cb9ac14e2deeeb8 \
+                    sha256  a54534acf9b89bc7ed264807013b505bf07f74dbe4bcfa37d32bd063870b087c \
+                    size    514100
+
+python.versions     38 39 310 311 312
+
+if {${name} ne ${subport}} {
+    depends_lib-append  port:py${python.version}-setuptools \
+                        port:py${python.version}-pbr \
+                        port:py${python.version}-six
+
+    post-destroot {
+        set dest_doc ${destroot}${prefix}/share/doc/${subport}
+        xinstall -d ${dest_doc}
+        xinstall -m 0644 -W ${worksrcpath} \
+            README.rst AUTHORS LICENSE ChangeLog CONTRIBUTING.rst ${dest_doc}
+    }
+}
